@@ -36,7 +36,11 @@ export default function Projects() {
       ],
       link: "/todo",
     },
-    { id: 6, imgSrc: "./src/img/projects/portfolio.png", link: "/" }, // Link to GutHub
+    {
+      id: 6,
+      imgSrc: "./src/img/projects/portfolio.png",
+      githubLink: "https://github.com/SarahCant/Portfolio/tree/main/src", // GitHub link
+    },
   ];
 
   // State and effect for img carousel
@@ -49,10 +53,14 @@ export default function Projects() {
     return () => clearInterval(interval);
   }, []);
 
-  // Function to scroll to top + navigate to selected page
-  const handleNavigation = (link) => {
-    window.scrollTo(0, 0); // Scroll to top
-    navigate(link); // Navigate to new page
+  // Function to scroll to top + navigate to selected page or open external GitHub link
+  const handleNavigation = (link, isExternal = false) => {
+    if (isExternal) {
+      window.open(link, "_blank"); // Open GitHub link in new tab
+    } else {
+      window.scrollTo(0, 0); // Scroll to top
+      navigate(link); // Navigate to new page
+    }
   };
 
   return (
@@ -67,10 +75,13 @@ export default function Projects() {
                   src={isCarousel ? study.imgSrc[currentImage] : study.imgSrc}
                   alt={`Project ${study.id}`}
                 />
-                {/* Custom navigation function to scroll to top and then navigate */}
                 <button
                   className="btn projects_grid_btn"
-                  onClick={() => handleNavigation(study.link)}
+                  onClick={() => {
+                    study.id === 6
+                      ? handleNavigation(study.githubLink, true) // GitHub link
+                      : handleNavigation(study.link); // Case Study link
+                  }}
                 >
                   {study.id === 6 ? "GitHub" : "Case Study"}
                 </button>
